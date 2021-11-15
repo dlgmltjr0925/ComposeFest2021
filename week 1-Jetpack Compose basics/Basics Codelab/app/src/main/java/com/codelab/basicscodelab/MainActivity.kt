@@ -3,12 +3,10 @@ package com.codelab.basicscodelab
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,11 +24,30 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun MyApp(names: List<String> = listOf("World", "Compose")) {
+private fun MyApp() {
+    var shouldShowOnBoarding by remember { mutableStateOf(true) }
+
+    if (shouldShowOnBoarding) {
+        OnBoardingScreen(onContinueClicked = { shouldShowOnBoarding = false})
+    } else {
+        Greetings()
+    }
+}
+
+@Composable
+fun Greetings(names: List<String> = listOf("World", "Compose")) {
     Column(modifier = Modifier.padding(vertical = 4.dp)) {
         for (name in names) {
             Greeting("Android")
         }
+    }
+}
+
+@Preview(showBackground = true, widthDp = 320, heightDp = 320)
+@Composable
+fun OnBoardingPreview() {
+    BasicsCodelabTheme {
+        OnBoardingScreen(onContinueClicked = {})
     }
 }
 
@@ -64,6 +81,24 @@ fun Greeting(name: String) {
 @Composable
 fun DefaultPreview() {
     BasicsCodelabTheme {
-        MyApp()
+        Greetings()
+    }
+}
+
+@Composable
+fun OnBoardingScreen(onContinueClicked: () -> Unit) {
+    Surface {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text("Welcome to the Basics Codelab!")
+            Button(
+                modifier = Modifier.padding(vertical = 24.dp),
+                onClick = onContinueClicked) {
+                Text(text = "Continue")
+            }
+        }
     }
 }
