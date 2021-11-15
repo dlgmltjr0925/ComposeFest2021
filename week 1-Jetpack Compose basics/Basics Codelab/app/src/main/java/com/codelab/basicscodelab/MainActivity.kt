@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -28,17 +30,17 @@ private fun MyApp() {
     var shouldShowOnBoarding by remember { mutableStateOf(true) }
 
     if (shouldShowOnBoarding) {
-        OnBoardingScreen(onContinueClicked = { shouldShowOnBoarding = false})
+        OnBoardingScreen(onContinueClicked = { shouldShowOnBoarding = false })
     } else {
         Greetings()
     }
 }
 
 @Composable
-fun Greetings(names: List<String> = listOf("World", "Compose")) {
-    Column(modifier = Modifier.padding(vertical = 4.dp)) {
-        for (name in names) {
-            Greeting("Android")
+fun Greetings(names: List<String> = List(1000) { "$it" }) {
+    LazyColumn(modifier = Modifier.padding(vertical = 4.dp)) {
+        items(items = names) { name ->
+            Greeting(name = name)
         }
     }
 }
@@ -96,7 +98,8 @@ fun OnBoardingScreen(onContinueClicked: () -> Unit) {
             Text("Welcome to the Basics Codelab!")
             Button(
                 modifier = Modifier.padding(vertical = 24.dp),
-                onClick = onContinueClicked) {
+                onClick = onContinueClicked
+            ) {
                 Text(text = "Continue")
             }
         }
