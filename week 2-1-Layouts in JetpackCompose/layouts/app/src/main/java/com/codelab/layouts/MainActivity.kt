@@ -46,6 +46,40 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
+fun TwoTexts(modifier: Modifier = Modifier, text1: String, text2: String) {
+    Row(modifier = modifier.height(IntrinsicSize.Min)) {
+        Text(
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 4.dp)
+                .wrapContentWidth(Alignment.Start),
+            text = text1
+        )
+
+        Divider(color = Color.Black, modifier = Modifier
+            .fillMaxHeight()
+            .width(1.dp))
+        Text(
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 4.dp)
+                .wrapContentWidth(Alignment.End),
+            text = text2
+        )
+    }
+}
+
+@Preview
+@Composable
+fun TwoTextsPreview() {
+    LayoutsCodelabTheme {
+        Surface {
+            TwoTexts(text1 = "Hi", text2 = "there")
+        }
+    }
+}
+
+@Composable
 fun DecoupledConstraintLayout() {
     BoxWithConstraints {
         val constraints = if (maxWidth < maxHeight) {
@@ -53,22 +87,22 @@ fun DecoupledConstraintLayout() {
         } else {
             decoupledConstraints(margin = 32.dp)
         }
-        
+
         ConstraintLayout(constraints) {
             Button(onClick = { /*TODO*/ }, modifier = Modifier.layoutId("button")) {
-                Text(text = "Button")              
+                Text(text = "Button")
             }
-            
+
             Text(text = "Text", Modifier.layoutId("text"))
         }
     }
 }
 
 private fun decoupledConstraints(margin: Dp): ConstraintSet {
-    return ConstraintSet { 
+    return ConstraintSet {
         val button = createRefFor("button")
         val text = createRefFor("text")
-        
+
         constrain(button) {
             top.linkTo(parent.top, margin = margin)
         }
@@ -116,7 +150,7 @@ fun ConstraintLayoutContent() {
             top.linkTo(button1.bottom, margin = 16.dp)
             centerHorizontallyTo(parent)
         })
-        
+
         val barrier = createEndBarrier(button1, text)
         Button(onClick = { /*TODO*/ }, modifier = Modifier.constrainAs(button2) {
             top.linkTo(parent.top, margin = 16.dp)
